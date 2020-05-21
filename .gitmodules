@@ -1,0 +1,7 @@
+[submodule "libs/vitroio-sdk"]
+	path = libs/vitroio-sdk
+	url = git@github.com:VitroTech/vitroio-sdk.git
+	branch = target_nucleo_stm32l486rg
+[submodule "shard-v2-bootloader-image"]
+	path = shard-v2-bootloader-image
+	url = https://github.com/VitroTech/shard-v2-bootloader-image.git

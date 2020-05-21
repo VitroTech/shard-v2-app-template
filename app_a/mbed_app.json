@@ -1,0 +1,20 @@
+{
+    "config": {
+        "usb_speed": {
+            "help": "USE_USB_OTG_FS or USE_USB_OTG_HS or USE_USB_HS_IN_FS",
+            "value": "USE_USB_OTG_FS"
+        }
+    },
+    "target_overrides": {
+        "*": {
+            "target.device_has_add": ["USBDEVICE"],
+            "platform.stdio-baud-rate": 115200
+        },
+        "NUCLEO_L486RG": {
+            "target.mbed_app_start": "0x8010800",
+            "target.mbed_app_size": "0x77800",
+            "target.bootloader_supported": true
+        }
+    },
+    "macros" : ["VITROIO_DEBUG_INFO_LEVEL=pc"]
+}

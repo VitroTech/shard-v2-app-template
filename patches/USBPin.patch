@@ -1,0 +1,18 @@
+diff --git a/usb/device/targets/TARGET_STM/USBPhy_STM32.cpp b/usb/device/targets/TARGET_STM/USBPhy_STM32.cpp
+index e5ff9c1674..a98f328444 100644
+--- a/usb/device/targets/TARGET_STM/USBPhy_STM32.cpp
++++ b/usb/device/targets/TARGET_STM/USBPhy_STM32.cpp
+@@ -292,7 +292,12 @@ void USBPhyHw::init(USBPhyEvents *events)
+     __HAL_RCC_USB_OTG_FS_CLK_ENABLE();
+ 
+ #else
+-#error "USB pins are not configured !"
++    __HAL_RCC_GPIOA_CLK_ENABLE();
++    pin_function(PA_11, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_NOPULL, GPIO_AF10_OTG_FS)); // DM
++    pin_function(PA_12, STM_PIN_DATA(STM_MODE_AF_PP, GPIO_NOPULL, GPIO_AF10_OTG_FS)); // DP
++    __HAL_RCC_PWR_CLK_ENABLE();
++    HAL_PWREx_EnableVddUSB();
++    __HAL_RCC_USB_OTG_FS_CLK_ENABLE();
+ #endif
+ 
+     __HAL_RCC_SYSCFG_CLK_ENABLE();

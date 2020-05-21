@@ -1,0 +1,14 @@
+diff --git a/source/hal_mbed.cpp b/source/hal_mbed.cpp
+index dd042fc..a5d5ad2 100644
+--- a/source/hal_mbed.cpp
++++ b/source/hal_mbed.cpp
+@@ -54,7 +54,7 @@ void atca_delay_10us(uint32_t delay) {
+ 
+ void atca_delay_ms(uint32_t delay) {
+     // tr_debug("delay_ms %lu", delay);
+-    thread_sleep_for(delay);
++    wait_ms(delay);
+ }
+ 
+ /** \brief hal_i2c_init manages requests to initialize a physical interface.  it manages use counts so when an interface
+ 

@@ -1,0 +1,40 @@
+*.*~
+
+# C++ objects and libs
+*.slo
+*.lo
+*.o
+#*.a
+*.la
+*.lai
+*.so
+*.dll
+*.dylib
+
+# mbed-os
+BUILD/
+mbed-os/
+.mbed
+mbed_settings.py
+mbed_settings.pyc
+
+# visual studio code
+.vscode/
+
+# kdevelop
+app_src/.kdev4
+app_src/app_src.kdev4
+
+# binary files
+*.bin
+*.swu
+
+# External dependencies and build directory
+ext
+bin
+
+# Nodes upgrade packages
+nodes-upgrade-package/bin
+
+# Python cache
+*/__pycache__

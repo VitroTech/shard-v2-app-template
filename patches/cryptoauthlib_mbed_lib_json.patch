@@ -1,0 +1,19 @@
+diff --git a/mbed_lib.json b/mbed_lib.json
+index 3193be0..4c8e03b 100644
+--- a/mbed_lib.json
++++ b/mbed_lib.json
+@@ -4,11 +4,11 @@
+     "config": {
+         "i2c_sda": {
+             "help": "I2C SDA pin to use",
+-            "value": "I2C_SDA"
++            "value": "PB_7"
+         },
+         "i2c_scl": {
+             "help": "I2C SCL pin to use",
+-            "value": "I2C_SCL"
++            "value": "PB_6"
+         },
+         "i2c_force_frequency": {
+             "help": "Force frequency on the I2C bus. Set to something different than 0 to override. E.g. the CRYPTOAUTH XPLAINED only works at 100 KHz",
+

@@ -1,0 +1,3 @@
+[submodule "libs/vitroio-sdk"]
+	path = libs/vitroio-sdk
+	url = git@github.com:VitroTech/vitroio-sdk.git

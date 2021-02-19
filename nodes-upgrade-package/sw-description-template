@@ -1,0 +1,31 @@
+software =
+{
+    id = "x";
+	version = "x.x.x";
+
+	/* hardware revision of gateway device that is compatible of performing
+	 * such upgrade */
+	hardware-compatibility = [ "rev2.0.2", "1.0", "rev3.0.7" ];
+
+	files: (
+		{
+			filename = "app_a.bin";
+			path = "/tmp/upgrade_package/app_a.bin";
+		},
+		{
+			filename = "app_b.bin";
+			path = "/tmp/upgrade_package/app_b.bin";
+		},
+		{
+			filename = "upgrade_package.json";
+			path = "/tmp/upgrade_package/upgrade_package.json";
+		}
+	       );
+
+	scripts: (
+		  {
+			filename = "trigger_nodes_upgrade.sh";
+			type = "shellscript";
+		  }
+		 );
+}

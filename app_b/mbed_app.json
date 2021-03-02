@@ -1,8 +1,8 @@
 {
     "target_overrides": {
         "NUCLEO_L486RG": {
-            "target.mbed_app_start": "0x8035800",
-            "target.mbed_app_size": "0x25000",
+            "target.mbed_app_start": "0x8088000",
+            "target.mbed_app_size": "0x77800",
             "target.bootloader_supported": true
         }
     },

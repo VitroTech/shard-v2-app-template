@@ -1,0 +1,10 @@
+{
+    "target_overrides": {
+        "NUCLEO_L486RG": {
+            "target.mbed_app_start": "0x8010800",
+            "target.mbed_app_size": "0x25000",
+            "target.bootloader_supported": true
+        }
+    },
+    "macros" : ["VITROIO_DEBUG_INFO_LEVEL=pc"]
+}

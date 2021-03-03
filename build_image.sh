@@ -15,10 +15,10 @@ APP_B_SIZE="151552"     # 0x25000
 
 
 
-# Compile bootloader, app a and app b
+# Compile app a and app b
 
 [ -d bin ] || mkdir bin
-#"bootloader"
+
 APPS=( "app_a" "app_b")
 for i in "${APPS[@]}"
 do
@@ -35,6 +35,7 @@ OUT_BIN="./bin/image.bin"
 # create padded file
 dd if=/dev/zero ibs=1k count=$FLASH_SIZE | tr "\000" "\377" > "$OUT_BIN"
 
-dd if=./bootloader/bootloader.bin of="$OUT_BIN" bs=1 count=$BOOTLOADER_SIZE seek=$BOOTLOADER_OFFSET conv=notrunc
+dd if=./shard-v2-bootloader-image/bootloader.bin of="$OUT_BIN" bs=1 count=$BOOTLOADER_SIZE seek=$BOOTLOADER_OFFSET conv=notrunc
 dd if=./bin/app_a.bin of="$OUT_BIN" bs=1 count=$APP_A_SIZE seek=$APP_A_OFFSET conv=notrunc
 dd if=./bin/app_b.bin of="$OUT_BIN" bs=1 count=$APP_B_SIZE seek=$APP_B_OFFSET
+

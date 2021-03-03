@@ -27,7 +27,6 @@ app_src/app_src.kdev4
 
 # binary files
 *.bin
-!bootloader.bin
 *.swu
 
 # External dependencies and build directory

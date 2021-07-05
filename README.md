@@ -6,6 +6,17 @@ If you want to build an application, be sure to initialize the submodules.
 git submodule update --init
 ```
 
+Demo applications are placed in `Applications` directory. To copy, and build,
+selected application to `app_src` directory (from when application is being
+build) run the following commad: 
+
+```bash
+./build_app.sh <APPLICATION>
+``` 
+
+With the name of directory with application in place of `<APPLICATION>`.
+for example: `./build_app.sh USB_MSD`.
+
 To build the application, docker is recommended be installed on your PC. In this
 way way you don't need to install the entire toolchain, you can just run the
 ready-to-use script. If you don't have it installed and you use Ubuntu follow

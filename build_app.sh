@@ -18,4 +18,4 @@ fi
 # Do a backup, just in case
 mv app_src/* app_src_backup
 cp -r $application/. app_src/
-# ./docker_build_image.sh
+./docker_build_image.sh

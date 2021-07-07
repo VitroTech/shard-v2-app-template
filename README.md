@@ -14,6 +14,9 @@ build) run the following commad:
 ./build_app.sh <APPLICATION>
 ``` 
 
+> Note that the `app_src` directory is empy after cloning the repo, as its
+> content is ignored by git. For first use, invoke the command listed above.
+
 With the name of directory with application in place of `<APPLICATION>`.
 for example: `./build_app.sh USB_MSD`.
 

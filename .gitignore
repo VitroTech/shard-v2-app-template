@@ -44,3 +44,9 @@ app_src_backup/*
 
 # exception to the rule
 !app_src_backup/.gitkeep 
+
+# exclude everything
+app_src/*
+
+# exception to the rule
+!app_src/.gitkeep 

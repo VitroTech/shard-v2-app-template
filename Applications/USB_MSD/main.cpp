@@ -2,11 +2,8 @@
 #include <rtc_api_hal.h>
 
 #include <shard-sdk.h>
-
-#include <watchdog.h>
+#include <vitroio-sdk/communication/can_layer.h>
 #include <global_consts.h>
-
-#include <sensors/sensors_parameters.h>
 
 #include "USBMSD.h"
 #include "FATFileSystem.h"
@@ -41,7 +38,7 @@ Ticker wdtKicker;
 
 // Peripherals 
 Serial pc(UART_DEBUG_TX, UART_DEBUG_RX, SERIAL_BAUDRATE);
-DigitalOut statusLed(VITROIO_DHT_DEMO_STATUS_LED_PIN);
+DigitalOut statusLed(VITROIO_TEMPLATE_STATUS_LED_PIN);
 
 // Event queues and threads
 Thread normalPriorityThread(osPriorityNormal, 0x1800);
@@ -58,21 +55,12 @@ Canbus canbus(CAN_RX, CAN_TX, &highPriorityEventQueue);
 
 NodeController node(
     &canbus,
-    FirmwareId((uint16_t)VITRIOIO_DHT_DEMO_FIRMWARE_ID),
+    FirmwareId((uint16_t)VITRIOIO_TEMPLATE_FIRMWARE_ID),
     Version(
-        VITROIO_DHT_DEMO_VERSION_MAJOR, 
-        VITROIO_DHT_DEMO_VERSION_MINOR, 
-        VITROIO_DHT_DEMO_VERSION_PATCH,
-        VITROIO_DHT_DEMO_VERSION_RC), 
-    FlashSpace(
-        VITROIO_DHT_DEMO_ENVIRONMENT_FLASH_OFFSET, 
-        VITROIO_DHT_DEMO_ENVIRONMENT_FLASH_SECTORS), 
-    FlashSpace(
-        VITROIO_DHT_DEMO_REGION_A_FLASH_OFFSET, 
-        VITROIO_DHT_DEMO_REGION_FLASH_SECTORS),
-    FlashSpace(
-        VITROIO_DHT_DEMO_REGION_B_FLASH_OFFSET, 
-        VITROIO_DHT_DEMO_REGION_FLASH_SECTORS),
+        VITROIO_TEMPLATE_VERSION_MAJOR, 
+        VITROIO_TEMPLATE_VERSION_MINOR, 
+        VITROIO_TEMPLATE_VERSION_PATCH,
+        VITROIO_TEMPLATE_VERSION_RC), 
     &highPriorityEventQueue
 );
 
@@ -174,7 +162,7 @@ void FS_thread() {
             while (!feof(fd)){
                 int size = fread(&payloadFromFile[0], 1, MAX_PD_SIZE - 16, fd);
                 //fwrite(&buff[0], 1, size, stdout);
-                dataBlock->make(payloadFromFile, size, SENSPARAM_INT_T);
+                dataBlock->make(payloadFromFile, size, 0x132);
                 dataBlock->print();
                 memset(payloadFromFile, 0, MAX_PD_SIZE - 16);
                 par++;
@@ -264,8 +252,8 @@ void frameReceivedCallback(const CanbusFrame& frame)
 int main()
 {
     MAIN_INFO("Application started; (id: %d) v%d.%d.%d.%d; vitroio-sdk v%s",
-        VITRIOIO_DHT_DEMO_FIRMWARE_ID,
-        VITROIO_DHT_DEMO_VERSION_MAJOR, VITROIO_DHT_DEMO_VERSION_MINOR, VITROIO_DHT_DEMO_VERSION_PATCH, VITROIO_DHT_DEMO_VERSION_RC,
+        VITRIOIO_TEMPLATE_FIRMWARE_ID,
+        VITROIO_TEMPLATE_VERSION_MAJOR, VITROIO_TEMPLATE_VERSION_MINOR, VITROIO_TEMPLATE_VERSION_PATCH, VITROIO_TEMPLATE_VERSION_RC,
         VITROIO_SDK_VERSION);
 
     wdtKicker.attach(callback(&wdt, &Watchdog::Service), 2.0);
@@ -289,17 +277,10 @@ int main()
         //NVIC_SystemReset();
     }
 
-
     MAIN_INFO("mbed-os-rev: %d.%d.%d", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
-    const uint32_t* ptr = &bank;
 
-    if(ptr > (const uint32_t*)(VITROIO_DHT_DEMO_REGION_B_FLASH_OFFSET + 0x08000000)){
-        MAIN_INFO("Pointer: %p, App B", ptr);
-    }else{
-        MAIN_INFO("Pointer: %p, App A", ptr);
-    }
-
-    dataBlock = new IoTBlock(&canbus, node.nodeId());
+    Can_layer can_layer = Can_layer(&canbus, node.nodeId());
+    dataBlock = new IoTBlock(&can_layer);
     //ThisThread::set_priority(osPriorityHigh);
     FS_runner.set_priority(osPriorityLow);
     FS_runner.start(FS_thread);

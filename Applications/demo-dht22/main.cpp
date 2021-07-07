@@ -1,6 +1,8 @@
 #include <mbed.h>
 #include <shard-sdk.h>
+#include <vitroio-sdk/communication/can_layer.h>
 #include <global_consts.h>
+
 /**
  * Place for including application dependent drivers and interfaces
  */
@@ -35,7 +37,7 @@ Ticker wdtKicker;
  * Peripherals
  */
 Serial pc(UART_DEBUG_TX, UART_DEBUG_RX, SERIAL_BAUDRATE);
-DigitalOut statusLed(VITROIO_DHT_DEMO_STATUS_LED_PIN);
+DigitalOut statusLed(VITROIO_TEMPLATE_STATUS_LED_PIN);
 
 /**
  * Event queues and threads
@@ -62,23 +64,16 @@ IoTBlock* iotBlock;
 
 NodeController node(
     &canbus,
-    FirmwareId((uint16_t)VITRIOIO_DHT_DEMO_FIRMWARE_ID),
+    FirmwareId((uint16_t)VITRIOIO_TEMPLATE_FIRMWARE_ID),
     Version(
-        VITROIO_DHT_DEMO_VERSION_MAJOR, 
-        VITROIO_DHT_DEMO_VERSION_MINOR, 
-        VITROIO_DHT_DEMO_VERSION_PATCH,
-        VITROIO_DHT_DEMO_VERSION_RC), 
-    FlashSpace(
-        VITROIO_DHT_DEMO_ENVIRONMENT_FLASH_OFFSET, 
-        VITROIO_DHT_DEMO_ENVIRONMENT_FLASH_SECTORS), 
-    FlashSpace(
-        VITROIO_DHT_DEMO_REGION_A_FLASH_OFFSET, 
-        VITROIO_DHT_DEMO_REGION_FLASH_SECTORS),
-    FlashSpace(
-        VITROIO_DHT_DEMO_REGION_B_FLASH_OFFSET, 
-        VITROIO_DHT_DEMO_REGION_FLASH_SECTORS),
+        VITROIO_TEMPLATE_VERSION_MAJOR, 
+        VITROIO_TEMPLATE_VERSION_MINOR, 
+        VITROIO_TEMPLATE_VERSION_PATCH,
+        VITROIO_TEMPLATE_VERSION_RC), 
     &highPriorityEventQueue
 );
+
+Can_layer can_layer(&canbus, node.nodeId());
 
 //MeasurementApi template parameter is maximum number of registered sensors.
 //If you want to register more then 4 change this number.
@@ -96,9 +91,9 @@ Dht22SensorInterface dhtIf(&dhtDrv);
 
 int main()
 {
-    MAIN_INFO("Application started; (id: %d) v%d.%d.%d.%d; vitroio-sdk v%s",
-        VITRIOIO_DHT_DEMO_FIRMWARE_ID,
-        VITROIO_DHT_DEMO_VERSION_MAJOR, VITROIO_DHT_DEMO_VERSION_MINOR, VITROIO_DHT_DEMO_VERSION_PATCH, VITROIO_DHT_DEMO_VERSION_RC,
+    MAIN_ERROR("Application started; (id: %d) v%d.%d.%d.%d; vitroio-sdk v%s",
+        VITRIOIO_TEMPLATE_FIRMWARE_ID,
+        VITROIO_TEMPLATE_VERSION_MAJOR, VITROIO_TEMPLATE_VERSION_MINOR, VITROIO_TEMPLATE_VERSION_PATCH, VITROIO_TEMPLATE_VERSION_RC,
         VITROIO_SDK_VERSION);
 
     wdtKicker.attach(callback(&wdt, &Watchdog::Service), 2.0);
@@ -120,7 +115,7 @@ int main()
         MAIN_ERROR("Failed to initialize communication");
     }
 
-    iotBlock = new IoTBlock(&canbus, node.nodeId());
+    iotBlock = new IoTBlock(&can_layer);
     /**
      * Measurement api initialization
      */

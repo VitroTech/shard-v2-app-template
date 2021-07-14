@@ -1,5 +1,6 @@
 #include <mbed.h>
 #include <shard-sdk.h>
+#include <vitroio-sdk/communication/can_layer.h>
 #include <global_consts.h>
 
 using namespace vitroio::sdk;
@@ -51,17 +52,10 @@ NodeController node(
         VITROIO_TEMPLATE_VERSION_MINOR, 
         VITROIO_TEMPLATE_VERSION_PATCH,
         VITROIO_TEMPLATE_VERSION_RC), 
-    FlashSpace(
-        VITROIO_TEMPLATE_ENVIRONMENT_FLASH_OFFSET, 
-        VITROIO_TEMPLATE_ENVIRONMENT_FLASH_SECTORS), 
-    FlashSpace(
-        VITROIO_TEMPLATE_REGION_A_FLASH_OFFSET, 
-        VITROIO_TEMPLATE_REGION_FLASH_SECTORS),
-    FlashSpace(
-        VITROIO_TEMPLATE_REGION_B_FLASH_OFFSET, 
-        VITROIO_TEMPLATE_REGION_FLASH_SECTORS),
     &highPriorityEventQueue
 );
+
+Can_layer can_layer(&canbus, node.nodeId());
 
 int main()
 {
@@ -88,7 +82,7 @@ int main()
         MAIN_ERROR("Failed to initialize communication");
     }
 
-    IoTBlock iotBlock = IoTBlock(&canbus, node.nodeId());
+    IoTBlock iotBlock = IoTBlock(&can_layer);
 
     while(1) {
         iotBlock.make(0, 0x132);

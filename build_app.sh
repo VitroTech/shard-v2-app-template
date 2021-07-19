@@ -20,7 +20,8 @@ BACKUP_DIR=app_src_backup
 NEW_DIR_NAME="backup_"$(date +%s)
 mkdir $BACKUP_DIR/$NEW_DIR_NAME
 
-if [ "$(ls -A app_src)" ]; then
+if [ "$(ls -A app_src -I ".gitkeep")" ]
+then
   mv app_src/* $BACKUP_DIR/$NEW_DIR_NAME
   cp -r $application/. app_src/
 else

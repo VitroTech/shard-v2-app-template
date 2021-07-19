@@ -16,20 +16,16 @@ then
 fi
 
 # Do a backup, just in case
-#Check if folder is empty
-DIR=app_src_backup
-if [ -d "$DIR" ]
-then
-	if [ "$(ls -A $DIR)" ]; then
-     echo "Take action $DIR is not Empty"
-     DIR_NAME="backup_"$(date +%s)
-     mkdir $DIR/$DIR_NAME
-     mv "$DIR"/* $DIR/$DIR_NAME
-	else
-     mv app_src/* app_src_backup
-     cp -r $application/. app_src/
-     ./docker_build_image.sh
-	fi
+BACKUP_DIR=app_src_backup
+NEW_DIR_NAME="backup_"$(date +%s)
+mkdir $BACKUP_DIR/$NEW_DIR_NAME
+
+if [ "$(ls -A app_src)" ]; then
+  mv app_src/* app_src_backup
+  cp -r $application/. app_src/
 else
-	echo "Directory $DIR not found."
+   cp -r $application/. app_src/
 fi
+
+#SUDO privileges are required
+sudo ./docker_build_image.sh

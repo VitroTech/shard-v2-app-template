@@ -28,5 +28,27 @@ else
    cp -r $application/. app_src/
 fi
 
-#SUDO privileges are required
-sudo ./docker_build_image.sh
+#Check if docker group exist and if user is on this group
+BELONGING_GROUPS="$(groups)"
+
+if [[ $BELONGING_GROUPS == *"docker"* ]]; then
+  # We already belong to docker group
+  echo "BUILDING IMAGE"
+  ./docker_build_image.sh
+else
+  #Either we do not belong to docker group or group does not exist
+  ALL_GROUPS="$(cut -d : -f 1 /etc/group)"
+  if [[ $ALL_GROUPS == *"docker"* ]]; then
+    echo "Docker group exist but you are not part of it...Including you in docker group"
+    sudo usermod -aG docker $USER
+    echo "DONE"
+    echo "You need to reboot for the changes to take effect"
+  else
+    echo "Docker group does not exist"
+    sudo groupadd docker
+    echo "Docker group created...Adding you to docker group"
+    sudo usermod -aG docker $USER
+    echo "DONE"
+    echo "You need to reboot for the changes to take effect"
+  fi
+fi

@@ -18,7 +18,7 @@ using namespace vitroio::sdk;
 #define SERIAL_BAUDRATE 115200
 
 #define LBYTE_MASK 0xFF
-#define UNIQUE_ID_REG ((uint32_t*) 0x1FFF7590)  
+#define UNIQUE_ID_REG ((uint32_t*) 0x1FFF7590)
 
 #define START_FRAME_PARAMETER_ID 0x7FF
 #define TIMESTAMP_REQUEST_PARAMETER_ID 0x40
@@ -36,7 +36,7 @@ using namespace vitroio::sdk;
 Watchdog wdt;
 Ticker wdtKicker;
 
-// Peripherals 
+// Peripherals
 Serial pc(UART_DEBUG_TX, UART_DEBUG_RX, SERIAL_BAUDRATE);
 DigitalOut statusLed(VITROIO_TEMPLATE_STATUS_LED_PIN);
 
@@ -57,10 +57,10 @@ NodeController node(
     &canbus,
     FirmwareId((uint16_t)VITRIOIO_TEMPLATE_FIRMWARE_ID),
     Version(
-        VITROIO_TEMPLATE_VERSION_MAJOR, 
-        VITROIO_TEMPLATE_VERSION_MINOR, 
+        VITROIO_TEMPLATE_VERSION_MAJOR,
+        VITROIO_TEMPLATE_VERSION_MINOR,
         VITROIO_TEMPLATE_VERSION_PATCH,
-        VITROIO_TEMPLATE_VERSION_RC), 
+        VITROIO_TEMPLATE_VERSION_RC),
     &highPriorityEventQueue
 );
 
@@ -85,7 +85,7 @@ FATFileSystem heap_fs("heap_fs");
 HeapBlockDevice bd(HEAP_BLOCK_DEVICE_SIZE, DEFAULT_BLOCK_SIZE);
 
 IoTBlock* dataBlock;
-// USB connection 
+// USB connection
 DigitalOut usbbb(PC_6);
 InterruptIn usbVbus(PA_9);
 // Detection of VBUS presence
@@ -157,7 +157,7 @@ void FS_thread() {
         if(fd){
             MAIN_INFO("FS_thread:\t Dumping file to screen.\r\n");
             MAIN_INFO("**********************************************\r\n\r\n");
-            
+
             uint8_t par = 0;
             while (!feof(fd)){
                 int size = fread(&payloadFromFile[0], 1, MAX_PD_SIZE - 16, fd);
@@ -192,7 +192,7 @@ void USB_thread() {
     // Wait for FS to init.
     usbVbus.rise(&riseVbus);
     usbVbus.fall(&fallVbus);
-    FS_ok.wait(); 
+    FS_ok.wait();
     // Attach usb process callback
     MAIN_INFO("USB_thread:\t Creating usb object.");
     usb = new USBMSD(&bd, false, 1155, 22314);
@@ -210,9 +210,9 @@ void USB_thread() {
                 failed = false;
                 MAIN_INFO("USB_thread:\t Mounting to USB host. %d\r\n", connAttempts);
                 conn = usb->connect();
-                if(!conn){ 
+                if(!conn){
                     connAttempts++;
-                }else{ 
+                }else{
                     MAIN_INFO("USB_Thread:\t Mounted.\r\n");
                 }
             }else{
@@ -285,7 +285,7 @@ int main()
     FS_runner.set_priority(osPriorityLow);
     FS_runner.start(FS_thread);
     USB_runner.start(USB_thread);
-    
+
     while(1) {
         USBProc.wait();
         usb->process();

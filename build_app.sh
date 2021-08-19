@@ -17,6 +17,10 @@ fi
 
 # Do a backup, just in case
 BACKUP_DIR=app_src_backup
+if [ ! -d "$BACKUP_DIR" ]
+then
+  mkdir $BACKUP_DIR
+fi
 NEW_DIR_NAME="backup_"$(date +%s)
 mkdir $BACKUP_DIR/$NEW_DIR_NAME
 

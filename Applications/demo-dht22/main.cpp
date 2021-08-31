@@ -66,10 +66,10 @@ NodeController node(
     &canbus,
     FirmwareId((uint16_t)VITRIOIO_TEMPLATE_FIRMWARE_ID),
     Version(
-        VITROIO_TEMPLATE_VERSION_MAJOR, 
-        VITROIO_TEMPLATE_VERSION_MINOR, 
+        VITROIO_TEMPLATE_VERSION_MAJOR,
+        VITROIO_TEMPLATE_VERSION_MINOR,
         VITROIO_TEMPLATE_VERSION_PATCH,
-        VITROIO_TEMPLATE_VERSION_RC), 
+        VITROIO_TEMPLATE_VERSION_RC),
     &highPriorityEventQueue
 );
 
@@ -110,7 +110,7 @@ int main()
         MAIN_ERROR("Failed to configure Shard Edge");
     }
 
-    int err = node.initCommunication();
+    int err = node.initCommunication(&can_layer);
     if(err != VITROIO_ERR_SUCCESS){
         MAIN_ERROR("Failed to initialize communication");
     }
@@ -135,11 +135,11 @@ int main()
 
 /**
  * @brief Function called by measurementApi
- * 
+ *
  * @details This function is called with a selected period. An array of sensors
  * values and its size are passed as arguments. The function prepares IoTBlocks
  * containing sensors values and sends them by CAN bus
- * 
+ *
  * @param values Pointer to a sensors values array
  * @param quantity Number of sensors values in the array
  */

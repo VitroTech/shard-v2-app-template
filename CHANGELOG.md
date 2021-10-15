@@ -7,6 +7,20 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [1.1.0] - 2021-10-12
 
+### Added
+
+- Added few demo applications
+    - **shard-v2-app-template** - very simple example, it initializes
+      communication with Crystal over CAN bus, then keeps sending IoT blocks.
+    - **IoTBlock-test** - similar to previous example, but sends IoT blocks with
+      random size and data.
+    - **USB_MSD** - presents Shard as mass storage device when connected using
+      USB, in root directory there is `test.txt` file available, everything
+      written into that file will be send encrypted as part of IoT block when
+      USB gets disconnected.
+    - **demo-dht22** - measures temperature and humidity using DHT22 sensor,
+      results are reported both to UART and to AWS.
+
 ### Changed
 
 - Updated EEPROM layout, now applications can have size up to 470 KiB each,

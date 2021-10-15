@@ -24,6 +24,8 @@ project adheres to [Semantic Versioning](https://semver.org/).
 - Fixed bug causing Shard to improperly detect version of firmware during
   upgrade.
 
+- Removed duplicated source files and headers from apps that don't need them.
+
 ## [1.0.0] - 2021-03-04
 
 ### Added

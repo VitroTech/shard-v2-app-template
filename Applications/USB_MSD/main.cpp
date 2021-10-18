@@ -270,8 +270,9 @@ int main()
         MAIN_ERROR("Failed to configure Shard Edge");
         //NVIC_SystemReset();
     }
+    Can_layer can_layer = Can_layer(&canbus, node.nodeId());
 
-    int err = node.initCommunication();
+    int err = node.initCommunication(&can_layer);
     if(err != VITROIO_ERR_SUCCESS){
         MAIN_ERROR("Failed to initialize communication");
         //NVIC_SystemReset();
@@ -279,7 +280,6 @@ int main()
 
     MAIN_INFO("mbed-os-rev: %d.%d.%d", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
 
-    Can_layer can_layer = Can_layer(&canbus, node.nodeId());
     dataBlock = new IoTBlock(&can_layer);
     //ThisThread::set_priority(osPriorityHigh);
     FS_runner.set_priority(osPriorityLow);

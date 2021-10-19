@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this
 project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.1] - 2021-10-19
+
+### Changed
+
+- Update SDK to v1.5.4
+
+### Fixed
+
+- Now OTA update do not override firmware on Shard with different fwID
+
 ## [1.1.0] - 2021-10-12
 
 ### Added

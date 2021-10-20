@@ -1,50 +1,30 @@
 #!/bin/bash
 
-if [ "$#" -lt 1 ]; then
-    vmajor=$(grep "VITROIO_TEMPLATE_VERSION_MAJOR   " ../common/global_consts.h)
-    MAJOR=("${vmajor: -2}")
-    vminor=$(grep "VITROIO_TEMPLATE_VERSION_MINOR   " ../common/global_consts.h)
-    MINOR=("${vminor: -3}")
-    vpatch=$(grep "VITROIO_TEMPLATE_VERSION_PATCH   " ../common/global_consts.h)
-    PATCH=("${vpatch: -3}")
-    vrc=$(grep "VITROIO_TEMPLATE_VERSION_RC   " ../common/global_consts.h)
-    RC=("${vrc: -2}")
-    vid=$(grep "VITRIOIO_TEMPLATE_FIRMWARE_ID   " ../common/global_consts.h)
-    FIRMWARE_ID=("${vid: -4}")
-    FIRMWARE_VERSION=($MAJOR.$MINOR.$PATCH.$RC)
-    echo $FIRMWARE_VERSION $FIRMWARE_ID
-else
-    FIRMWARE_VERSION=${1}
-    FIRMWARE_ID=3
-fi
+eval $(sed -n 's/^#define  *\([^ ]*\)  *\(.*\) *$/export \1=\2/p' ../common/global_consts.h)
+FIRMWARE_VERSION=($VITROIO_TEMPLATE_VERSION_MAJOR.$VITROIO_TEMPLATE_VERSION_MINOR.$VITROIO_TEMPLATE_VERSION_PATCH.$VITROIO_TEMPLATE_VERSION_RC)
 
-if [ "$#" -eq 2 ]; then
-    FIRMWARE_ID=${2}
-fi
-
-
-if [ $FIRMWARE_ID -gt 1023 ]; then
-    echo "ERROR: firmware id out of range"
+if [ $VITRIOIO_TEMPLATE_FIRMWARE_ID -gt 1023 ]; then
+    echo "ERROR: VITRIOIO_TEMPLATE_FIRMWARE_ID out of range"
     exit 1
 fi
 
-if [ $MAJOR -gt 15 ]; then
-    echo "ERROR: major version out of range"
+if [ $VITROIO_TEMPLATE_VERSION_MAJOR -gt 15 ]; then
+    echo "ERROR: VITROIO_TEMPLATE_VERSION_MAJOR out of range"
     exit 1
 fi
 
-if [ $MINOR -gt 127 ]; then
-    echo "ERROR: minor version out of range"
+if [ $VITROIO_TEMPLATE_VERSION_MINOR -gt 127 ]; then
+    echo "ERROR: VITROIO_TEMPLATE_VERSION_MINOR out of range"
     exit 1
 fi
 
-if [ $PATCH -gt 127 ]; then
-    echo "ERROR: patch version out of range"
+if [ $VITROIO_TEMPLATE_VERSION_PATCH -gt 127 ]; then
+    echo "ERROR: VITROIO_TEMPLATE_VERSION_PATCH out of range"
     exit 1
 fi
 
-if [ $RC -gt 15 ]; then
-    echo "ERROR: rc version out of range"
+if [ $VITROIO_TEMPLATE_VERSION_RC -gt 15 ]; then
+    echo "ERROR: VITROIO_TEMPLATE_VERSION_RC out of range"
     exit 1
 fi
 
@@ -59,7 +39,7 @@ UPGRADE_PACKAGE_JSON="upgrade_package.json"
 UPGRADE_PACKAGE_JSON_TEMPLATE="upgrade_package_template.json"
 SHELLSCRIPT="trigger_nodes_upgrade.sh"
 
-echo -e "\nFirmware id is: ${FIRMWARE_ID}"
+echo -e "\nFirmware id is: ${VITRIOIO_TEMPLATE_FIRMWARE_ID}"
 echo -e "\nFirmware version is: ${FIRMWARE_VERSION}\n"
 
 [ -d $WORK_DIR ] || mkdir $WORK_DIR
@@ -67,7 +47,7 @@ echo -e "\nFirmware version is: ${FIRMWARE_VERSION}\n"
 cp $SW_DESCRIPTION_TEMPLATE  "$WORK_DIR/$SW_DESCRIPTION"
 
 echo "Setting id in ${SW_DESCRIPTION} file..."
-sed -e "s/id = \"x\"/id = \"${FIRMWARE_ID}\"/" -i "$WORK_DIR/$SW_DESCRIPTION"
+sed -e "s/id = \"x\"/id = \"${VITRIOIO_TEMPLATE_FIRMWARE_ID}\"/" -i "$WORK_DIR/$SW_DESCRIPTION"
 
 echo "Setting version in ${SW_DESCRIPTION} file..."
 sed -e "s/.*version =.*/\tversion = \"${FIRMWARE_VERSION}\";/" -i "$WORK_DIR/$SW_DESCRIPTION"
@@ -75,7 +55,7 @@ sed -e "s/.*version =.*/\tversion = \"${FIRMWARE_VERSION}\";/" -i "$WORK_DIR/$SW
 cp $UPGRADE_PACKAGE_JSON_TEMPLATE  "$WORK_DIR/$UPGRADE_PACKAGE_JSON"
 
 echo "Setting id in ${UPGRADE_PACKAGE_JSON} file..."
-sed -e "s/\"id\" : \"x\"/\"id\": \"${FIRMWARE_ID}\"/" -i "$WORK_DIR/$UPGRADE_PACKAGE_JSON"
+sed -e "s/\"id\" : \"x\"/\"id\": \"${VITRIOIO_TEMPLATE_FIRMWARE_ID}\"/" -i "$WORK_DIR/$UPGRADE_PACKAGE_JSON"
 
 echo "Setting version in ${UPGRADE_PACKAGE_JSON} file..."
 sed -e "s/.*version.*/    \"version\": \"${FIRMWARE_VERSION}\",/" -i "$WORK_DIR/$UPGRADE_PACKAGE_JSON"

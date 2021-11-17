@@ -18,7 +18,7 @@ build) run the following commad:
 > content is ignored by git. For first use, invoke the command listed above.
 
 With the name of directory with application in place of `<APPLICATION>`.
-for example: `./build_app.sh USB_MSD`.
+for example: `./build_app.sh IoTBlock-test`.
 
 To build the application, docker is recommended be installed on your PC. In this
 way way you don't need to install the entire toolchain, you can just run the

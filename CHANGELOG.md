@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this
 project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.2] - 2022-01-26
+
+### Changed
+
+- Updated references to bootloader binary repository
+
+### Fixed
+
+- SWU package builder script
+
 ## [1.1.1] - 2021-10-19
 
 ### Changed
@@ -60,5 +70,7 @@ project adheres to [Semantic Versioning](https://semver.org/).
 - Template for an application main.cpp file
     - It contains code that sends dummy IoT Block every 5s
 
+[1.1.2]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.1.1...v1.1.2
+[1.1.1]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/VitroTech/shard-v2-app-template/compare/b9c98589b7e6e711d9c1a72bfc582d45c8447fc7...v1.0.0

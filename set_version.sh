@@ -1,0 +1,31 @@
+#!/bin/bash
+
+FILENAME="common/global_consts.h"
+
+MAJOR=$1
+MINOR=$2
+PATCH=$3
+RC=$4
+
+if [ "$#" -ne 4 ]; then
+    echo "Use: $0 MAJOR MINOR PATCH RC"
+    exit
+fi
+
+echo \
+"#ifndef GLOBAL_CONSTS_H
+#define GLOBAL_CONSTS_H
+
+#define VITROIO_TEMPLATE_VERSION_MAJOR   "$MAJOR"
+#define VITROIO_TEMPLATE_VERSION_MINOR   "$MINOR"
+#define VITROIO_TEMPLATE_VERSION_PATCH   "$PATCH"
+#define VITROIO_TEMPLATE_VERSION_RC      "$RC"
+
+#define VITRIOIO_TEMPLATE_FIRMWARE_ID    0
+
+#define VITROIO_TEMPLATE_STATUS_LED_PIN PA_5
+
+#define TEMPLATE_DEBUG    0
+
+#endif // GLOBAL_CONSTS_H" > $FILENAME
+

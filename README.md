@@ -48,3 +48,12 @@ while(1)
 
 Feel free to modify main.cpp and add your sensors interfaces and drivers inside
 the `app_src/` directory.
+
+## Version management
+
+The version of application can be changed in `common/global_consts.h` file. It
+can be done manually, or by using `set_version.sh` script. To use it, run:
+
+```
+$ ./set_version.sh <MAJOR> <MINOR> <PATCH> <RC>
+```

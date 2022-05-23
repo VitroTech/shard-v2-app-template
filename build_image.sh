@@ -101,7 +101,7 @@ _output_file(){
         fi
         if _file_exists $app_b_bin
         then
-            dd if=$app_b_bin of="$OUT_BIN" bs=1 count=$APP_B_SIZE seek=$APP_B_OFFSET
+            dd if=$app_b_bin of="$OUT_BIN" bs=1 count=$APP_B_SIZE seek=$APP_B_OFFSET conv=notrunc
         else
             echo "Please check if there is a problem with the compiler."
             echo "Aborting..."

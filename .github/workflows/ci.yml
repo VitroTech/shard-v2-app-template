@@ -41,14 +41,10 @@ jobs:
       - name: Prepare files
         run: |
           echo $CURRENT_VERSION
-          sudo mv shard-v2-app-template/bin/app_a.bin app_a-${CURRENT_VERSION}.bin
-          sudo mv shard-v2-app-template/bin/app_b.bin app_b-${CURRENT_VERSION}.bin
-          sudo mv shard-v2-app-template/bin/image.bin image-${CURRENT_VERSION}.bin
+          sudo mv shard-v2-app-template/bin/image.bin iot-block-test-${CURRENT_VERSION}.bin
       - name: Copy files to AWS S3 bucket
         run: |
-          aws s3 cp app_a-${CURRENT_VERSION}.bin s3://dev-vitro-shard-applications/shard-binaries-test/
-          aws s3 cp app_b-${CURRENT_VERSION}.bin s3://dev-vitro-shard-applications/shard-binaries-test/
-          aws s3 cp image-${CURRENT_VERSION}.bin s3://dev-vitro-shard-applications/shard-binaries-test/
+          aws s3 cp iot-block-test-${CURRENT_VERSION}.bin s3://dev-vitro-shard-applications/
       - name: Increase version
         run: |
           NEW_MAJOR=$(($MAJOR + 10))
@@ -64,11 +60,7 @@ jobs:
       - name: Prepare bumped files
         run: |
           echo $CURRENT_VERSION
-          sudo mv shard-v2-app-template/bin/app_a.bin app_a-${NEW_VERSION}.bin
-          sudo mv shard-v2-app-template/bin/app_b.bin app_b-${NEW_VERSION}.bin
-          sudo mv shard-v2-app-template/bin/image.bin image-${NEW_VERSION}.bin
+          sudo mv shard-v2-app-template/bin/image.bin iot-block-test-${NEW_VERSION}.bin
       - name: Copy bumped files to AWS S3 bucket
         run: |
-          aws s3 cp app_a-${NEW_VERSION}.bin s3://dev-vitro-shard-applications/shard-binaries-test/
-          aws s3 cp app_b-${NEW_VERSION}.bin s3://dev-vitro-shard-applications/shard-binaries-test/
-          aws s3 cp image-${NEW_VERSION}.bin s3://dev-vitro-shard-applications/shard-binaries-test/
+          aws s3 cp iot-block-test-${NEW_VERSION}.bin s3://dev-vitro-shard-applications/bumped-versions/

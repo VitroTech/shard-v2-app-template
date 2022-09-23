@@ -1,0 +1,66 @@
+name: CI-IoTBlock
+on:
+  push:
+    branches:
+      - build-from-ci
+
+jobs:
+  build:
+    name: Build IoT Block test app
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          path: "shard-v2-app-template"
+      - name: Get version
+        run: |
+          cd shard-v2-app-template
+          MAJOR=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | cut -d " " -f 5 | sed -n 1p`
+          MINOR=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | cut -d " " -f 5 | sed -n 2p`
+          PATCH=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | cut -d " " -f 5 | sed -n 3p`
+          CURRENT_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_ENV
+          echo "MAJOR=${MAJOR}" >> $GITHUB_ENV
+          echo "MINOR=${MINOR}" >> $GITHUB_ENV
+          echo "PATCH=${PATCH}" >> $GITHUB_ENV
+      - name: Apply patch
+        run: |
+          cd shard-v2-app-template
+          git apply patches/0001-docker_build_image.sh-change-docker-flag-to-suit-ci.patch
+      - name: Build app
+        run: |
+          cd shard-v2-app-template
+          chmod +x docker_build_image.sh
+          git submodule update --init
+          ./build_app.sh IoTBlock-test
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-1
+      - name: Prepare files
+        run: |
+          echo $CURRENT_VERSION
+          sudo mv shard-v2-app-template/bin/image.bin iot-block-test-${CURRENT_VERSION}.bin
+      - name: Copy files to AWS S3 bucket
+        run: |
+          aws s3 cp iot-block-test-${CURRENT_VERSION}.bin s3://dev-vitro-shard-applications/
+      - name: Increase version
+        run: |
+          NEW_MAJOR=$(($MAJOR + 10))
+          echo $MAJOR
+          NEW_VERSION="$NEW_MAJOR.$MINOR.$PATCH"
+          echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
+          echo "NEW_MAJOR=${NEW_MAJOR}" >> $GITHUB_ENV
+          sed -i "s/$MAJOR/$NEW_MAJOR/" shard-v2-app-template/common/global_consts.h
+      - name: Build app version bumped
+        run: |
+          cd shard-v2-app-template
+          ./build_app.sh IoTBlock-test
+      - name: Prepare bumped files
+        run: |
+          echo $CURRENT_VERSION
+          sudo mv shard-v2-app-template/bin/image.bin iot-block-test-${NEW_VERSION}.bin
+      - name: Copy bumped files to AWS S3 bucket
+        run: |
+          aws s3 cp iot-block-test-${NEW_VERSION}.bin s3://dev-vitro-shard-applications/bumped-versions/

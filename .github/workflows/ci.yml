@@ -2,7 +2,7 @@ name: CI-IoTBlock
 on:
   push:
     branches:
-      - build-from-ci
+      - main
 
 jobs:
   build:

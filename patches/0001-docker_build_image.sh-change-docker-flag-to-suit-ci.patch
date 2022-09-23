@@ -17,7 +17,7 @@ index d1e4e36..0900c72 100755
      if _command_exists docker
      then
 -        docker run --rm -it -v $PWD:/home/build vitrotech/docker-mbed-cli /bin/bash -c ./$build_script
-+        docker run --rm -i -v $PWD:/home/build vitrotech/docker-mbed-cli /bin/bash -c ./$build_script
++        docker run --rm -v $PWD:/home/build vitrotech/docker-mbed-cli /bin/bash -c ./$build_script
      else
          echo "Docker is not installed."
          echo "Aborting ..."

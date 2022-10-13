@@ -30,7 +30,7 @@ _run_docker(){
     
     if _command_exists docker
     then
-        docker run --rm -it -v $PWD:/home/build vitrotech/docker-mbed-cli /bin/bash -c ./$build_script
+        docker run -i -t --mount=type=bind,source="$(pwd)",destination=/var/mbed -w /var/mbed ghcr.io/armmbed/mbed-os-env /bin/bash -c ./$build_script
     else
         echo "Docker is not installed."
         echo "Aborting ..."

@@ -11,6 +11,7 @@ using namespace vitroio::sdk;
 #define MAIN_ERROR(format, ...) VITROIO_DEBUG_ERROR(MAIN_MODULE_NAME, format, ##__VA_ARGS__);
 
 #define SERIAL_BAUDRATE 115200
+BufferedSerial pc(UART_DEBUG_TX, UART_DEBUG_RX, SERIAL_BAUDRATE);
 
 /**
  * Watchdog
@@ -57,9 +58,14 @@ NodeController node(
 
 Can_layer can_layer(&canbus, node.nodeId());
 
+FileHandle *mbed::mbed_override_console(int fd)
+{
+    return &pc;
+}
+
 int main()
 {
-    MAIN_ERROR("Application started; (id: %d) v%d.%d.%d.%d; vitroio-sdk v%s",
+    MAIN_INFO("Application started; (id: %d) v%d.%d.%d.%d; vitroio-sdk v%s",
         VITRIOIO_TEMPLATE_FIRMWARE_ID,
         VITROIO_TEMPLATE_VERSION_MAJOR, VITROIO_TEMPLATE_VERSION_MINOR, VITROIO_TEMPLATE_VERSION_PATCH, VITROIO_TEMPLATE_VERSION_RC,
         VITROIO_SDK_VERSION);

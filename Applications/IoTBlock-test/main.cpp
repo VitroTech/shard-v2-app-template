@@ -15,13 +15,13 @@ using namespace vitroio::sdk;
 /**
  * Watchdog
  */
-Watchdog wdt;
-Ticker wdtKicker;
+//Watchdog wdt;
+//Ticker wdtKicker;
 
 /**
  * Peripherals
  */
-Serial pc(UART_DEBUG_TX, UART_DEBUG_RX, SERIAL_BAUDRATE);
+//Serial pc(UART_DEBUG_TX, UART_DEBUG_RX, SERIAL_BAUDRATE);
 DigitalOut statusLed(VITROIO_TEMPLATE_STATUS_LED_PIN);
 
 /**
@@ -64,7 +64,7 @@ int main()
         VITROIO_TEMPLATE_VERSION_MAJOR, VITROIO_TEMPLATE_VERSION_MINOR, VITROIO_TEMPLATE_VERSION_PATCH, VITROIO_TEMPLATE_VERSION_RC,
         VITROIO_SDK_VERSION);
 
-    wdtKicker.attach(callback(&wdt, &Watchdog::Service), 2.0);
+    //wdtKicker.attach(callback(&wdt, &Watchdog::Service), 2.0);
 
     highPriorityThread.start(callback(&highPriorityEventQueue, &EventQueue::dispatch_forever));
 

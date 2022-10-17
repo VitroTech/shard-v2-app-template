@@ -2,6 +2,9 @@
 #include <shard-sdk.h>
 #include <vitroio-sdk/communication/can_layer.h>
 #include <global_consts.h>
+#include "ResetReason.h"
+
+#include <string>
 
 using namespace vitroio::sdk;
 
@@ -63,12 +66,33 @@ FileHandle *mbed::mbed_override_console(int fd)
     return &pc;
 }
 
+
+std::string reset_reason_to_string(const reset_reason_t reason)
+{
+    switch (reason) {
+        case RESET_REASON_POWER_ON:
+            return "Power On";
+        case RESET_REASON_PIN_RESET:
+            return "Hardware Pin";
+        case RESET_REASON_SOFTWARE:
+            return "Software Reset";
+        case RESET_REASON_WATCHDOG:
+            return "Watchdog";
+        default:
+            return "Other Reason";
+    }
+}
+
 int main()
 {
-    MAIN_INFO("Application started; (id: %d) v%d.%d.%d.%d; vitroio-sdk v%s",
+    MAIN_INFO("1Application started; (id: %d) v%d.%d.%d.%d; vitroio-sdk v%s",
         VITRIOIO_TEMPLATE_FIRMWARE_ID,
         VITROIO_TEMPLATE_VERSION_MAJOR, VITROIO_TEMPLATE_VERSION_MINOR, VITROIO_TEMPLATE_VERSION_PATCH, VITROIO_TEMPLATE_VERSION_RC,
         VITROIO_SDK_VERSION);
+
+    const reset_reason_t reason = ResetReason::get();
+
+    printf("Last system reset reason: %s (%d)\r\n", reset_reason_to_string(reason).c_str(), reason);
 
     //wdtKicker.attach(callback(&wdt, &Watchdog::Service), 2.0);
 
@@ -96,10 +120,11 @@ int main()
         block[i] = i;
         iotBlock.make(block, i + 1, 0x132);
         iotBlock.print();
+
         iotBlock.send();
         i++;
         if(i >= 256) i = 0;
-        ThisThread::sleep_for(5000);
+        ThisThread::sleep_for(5s);
     }
 
     return 0;

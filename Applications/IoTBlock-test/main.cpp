@@ -72,7 +72,8 @@ int main()
         VITROIO_TEMPLATE_VERSION_MAJOR, VITROIO_TEMPLATE_VERSION_MINOR, VITROIO_TEMPLATE_VERSION_PATCH, VITROIO_TEMPLATE_VERSION_RC,
         VITROIO_SDK_VERSION);
 
-    Watchdog &wdt = Watchdog::get_instance();
+    Watchdog &watchdog = Watchdog::get_instance();
+    watchdog.start(10000);
 	wdtKicker.attach(&kickWatchdog, 2.0);
 
     highPriorityThread.start(callback(&highPriorityEventQueue, &EventQueue::dispatch_forever));

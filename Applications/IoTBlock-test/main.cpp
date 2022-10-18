@@ -13,6 +13,11 @@ using namespace vitroio::sdk;
 #define SERIAL_BAUDRATE 115200
 
 /**
+ * Watchdog ticker
+ */
+Ticker wdtKicker;
+
+/**
  * Peripherals
  */
 BufferedSerial pc(UART_DEBUG_TX, UART_DEBUG_RX, SERIAL_BAUDRATE);
@@ -56,12 +61,19 @@ FileHandle *mbed::mbed_override_console(int fd)
     return &pc;
 }
 
+void kickWatchdog(){
+	Watchdog::get_instance().kick();
+}
+
 int main()
 {
     MAIN_INFO("Application started; (id: %d) v%d.%d.%d.%d; vitroio-sdk v%s",
         VITRIOIO_TEMPLATE_FIRMWARE_ID,
         VITROIO_TEMPLATE_VERSION_MAJOR, VITROIO_TEMPLATE_VERSION_MINOR, VITROIO_TEMPLATE_VERSION_PATCH, VITROIO_TEMPLATE_VERSION_RC,
         VITROIO_SDK_VERSION);
+
+    Watchdog &wdt = Watchdog::get_instance();
+	wdtKicker.attach(&kickWatchdog, 2.0);
 
     highPriorityThread.start(callback(&highPriorityEventQueue, &EventQueue::dispatch_forever));
 

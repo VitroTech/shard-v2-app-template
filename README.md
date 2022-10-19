@@ -33,18 +33,4 @@ To build template application run docker_build_image.sh:
 
 Now the application is ready to be flashed on the Vitro Shard. The compiled
 application binary is named `image.bin` and can be found in the `bin/` folder.
-
-Source code of the application is inside the `app_src/` directory. By default
-app sends encrypted IoT Blocks with dummy values every 5 seconds:
-
-```cpp
-while(1)
-{
-    iotBlock.make(0, 0x132);
-    iotBlock.send();
-    ThisThread::sleep_for(5000);
-}
-```
-
-Feel free to modify main.cpp and add your sensors interfaces and drivers inside
-the `app_src/` directory.
+It can be done by using `docker_flash_image.sh` script.

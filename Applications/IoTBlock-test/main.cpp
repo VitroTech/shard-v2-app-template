@@ -13,15 +13,14 @@ using namespace vitroio::sdk;
 #define SERIAL_BAUDRATE 115200
 
 /**
- * Watchdog
+ * Watchdog ticker
  */
-Watchdog wdt;
 Ticker wdtKicker;
 
 /**
  * Peripherals
  */
-Serial pc(UART_DEBUG_TX, UART_DEBUG_RX, SERIAL_BAUDRATE);
+BufferedSerial pc(UART_DEBUG_TX, UART_DEBUG_RX, SERIAL_BAUDRATE);
 DigitalOut statusLed(VITROIO_TEMPLATE_STATUS_LED_PIN);
 
 /**
@@ -57,14 +56,25 @@ NodeController node(
 
 Can_layer can_layer(&canbus, node.nodeId());
 
+FileHandle *mbed::mbed_override_console(int fd)
+{
+    return &pc;
+}
+
+void kickWatchdog(){
+	Watchdog::get_instance().kick();
+}
+
 int main()
 {
-    MAIN_ERROR("Application started; (id: %d) v%d.%d.%d.%d; vitroio-sdk v%s",
+    MAIN_INFO("Application started; (id: %d) v%d.%d.%d.%d; vitroio-sdk v%s",
         VITRIOIO_TEMPLATE_FIRMWARE_ID,
         VITROIO_TEMPLATE_VERSION_MAJOR, VITROIO_TEMPLATE_VERSION_MINOR, VITROIO_TEMPLATE_VERSION_PATCH, VITROIO_TEMPLATE_VERSION_RC,
         VITROIO_SDK_VERSION);
 
-    wdtKicker.attach(callback(&wdt, &Watchdog::Service), 2.0);
+    Watchdog &watchdog = Watchdog::get_instance();
+    watchdog.start(10000);
+	wdtKicker.attach(&kickWatchdog, 2.0);
 
     highPriorityThread.start(callback(&highPriorityEventQueue, &EventQueue::dispatch_forever));
 
@@ -90,10 +100,11 @@ int main()
         block[i] = i;
         iotBlock.make(block, i + 1, 0x132);
         iotBlock.print();
+
         iotBlock.send();
         i++;
         if(i >= 256) i = 0;
-        ThisThread::sleep_for(5000);
+        ThisThread::sleep_for(5s);
     }
 
     return 0;

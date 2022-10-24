@@ -1,25 +1,25 @@
-From 122e8ec06befbb5d451e6d3bb94d9aa22d1b84bd Mon Sep 17 00:00:00 2001
-From: wkawka <wiktor.kawka@3mdeb.com>
-Date: Fri, 23 Sep 2022 09:40:39 +0200
+From 48c7c0193ead326f5f22d39bfd338b1cbf951a42 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micha=C5=82=20Kotyla?= <michal.kotyla@3mdeb.com>
+Date: Mon, 24 Oct 2022 10:00:04 +0200
 Subject: [PATCH] docker_build_image.sh: change docker flag to suit ci
 
-Signed-off-by: wkawka <wiktor.kawka@3mdeb.com>
 ---
- docker_build_image.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ docker_build_image.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/docker_build_image.sh b/docker_build_image.sh
-index d1e4e36..0900c72 100755
+index 290ca6d..6699bfc 100755
 --- a/docker_build_image.sh
 +++ b/docker_build_image.sh
 @@ -30,7 +30,7 @@ _run_docker(){
      
      if _command_exists docker
      then
--        docker run --rm -it -v $PWD:/home/build vitrotech/docker-mbed-cli /bin/bash -c ./$build_script
-+        docker run --rm -v $PWD:/home/build vitrotech/docker-mbed-cli /bin/bash -c ./$build_script
+-        docker run --rm -it --mount=type=bind,source="$(pwd)",destination=/var/mbed -w /var/mbed ghcr.io/armmbed/mbed-os-env /bin/bash -c ./$build_script
++        docker run --rm --mount=type=bind,source="$(pwd)",destination=/var/mbed -w /var/mbed ghcr.io/armmbed/mbed-os-env /bin/bash -c ./$build_script
      else
          echo "Docker is not installed."
          echo "Aborting ..."
-2.25.1
+-- 
+2.38.0
 

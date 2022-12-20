@@ -36,7 +36,10 @@ application binary is named `image.bin` and can be found in the `bin/` folder.
 It can be done by using `docker_flash_image.sh` script.
 
 # Notes on mbedOS 6.x
-To reduce the code size Mbed introduced Minimal printf and snprintf. As of Mbed OS 6.0 it is enabled by default. Floating point parameters are only present when minimal-printf-enable-floating-point config is set to true (disabled by default) as shown below:
+To reduce the code size Mbed introduced Minimal printf and snprintf. As of 
+Mbed OS 6.0 it is enabled by default. Floating point parameters are only 
+present when minimal-printf-enable-floating-point config is set to true 
+(disabled by default) as shown below:
 ```
 "target_overrides": {
         "*": {
@@ -48,7 +51,10 @@ To reduce the code size Mbed introduced Minimal printf and snprintf. As of Mbed 
     }
 ```
 
-If your application requires more advanced functionality (at the cost of using more flash memory) you can switch to the standard printf library configuring it in mbed_app.json file by overriding the parameter target.printf_lib with the value std as shown below:
+If your application requires more advanced functionality (at the cost of 
+using more flash memory) you can switch to the standard printf library 
+configuring it in mbed_app.json file by overriding the parameter 
+target.printf_lib with the value std as shown below:
  ```
  "target_overrides": {
         "*": {

@@ -7,7 +7,7 @@ set -o pipefail
 # Check for the argument
 _argument_check() {
 
-    if [ ! -d ./../Applications/$1 ]
+    if [ ! -d ./Applications/$1 ]
     then
         echo "Specify application to build. It must be located in the Application folder."
         exit 1

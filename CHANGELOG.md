@@ -5,14 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this
 project adheres to [Semantic Versioning](https://semver.org/).
 
-## [1.1.4] - 2022-10-21
+<!--
+
+TEMPLATE
+
+## [x.y.z] YYYY-MM-DD
+
+### Added
+
+- New features/things that were not available
+- ABC
+
+### Changed
+
+- Old features/things that now look/work in different way
+
+### Fixed
+
+- Old features/things that now work as they should
+
+### Removed
+
+- Removed features/things
+
+-->
+
+## [1.4.0] - 2022-10-21
 
 ### Changed
 
 - SDK updated to v2.0.0
 - Bootloader updated to v1.0.2
 
-## [1.1.2] - 2022-01-26
+## [1.3.0] - 2022-07-06
+
+## Changed
+
+- SDK updated to v1.8.2
+
+## [1.2.0] - 2022-05-16
+
+## Changed
+
+- SDK updated to v1.8.0
+
+## [1.1.2] - 2022-02-28
 
 ### Changed
 

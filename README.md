@@ -1,5 +1,10 @@
 # shard-v2-app-template
 
+This repository contains example application written with `Vitro Shard SDK`
+published in public, [SDK](https://github.com/VitroTech/vitroio-sdk) repository.
+
+## Building application
+
 If you want to build an application, be sure to initialize the submodules.
 
 ```
@@ -34,7 +39,15 @@ It can be done by using `docker_flash_image.sh` script.
 > Note: this method needs ST-Link device connected to host PC and also a header
   populated on Shard.
 
-# Notes on mbedOS 6.x
+## Building swu image
+
+The `swu` image is and update image for Vitro Shard built with
+[SWUpdate](https://sbabic.github.io/swupdate/swupdate.html) project. In order to
+prepare such package, please follow the
+[README](./nodes-upgrade-package/README.md) placed in `nodes-upgrade-package`
+subdirectory.
+
+## Notes on mbedOS 6.x
 To reduce the code size Mbed introduced Minimal printf and snprintf. As of
 Mbed OS 6.0 it is enabled by default. Floating point parameters are only
 present when minimal-printf-enable-floating-point config is set to true

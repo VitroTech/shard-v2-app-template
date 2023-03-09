@@ -1,5 +1,20 @@
 #!/bin/bash
 
+# Check for the argument
+_argument_check() {
+
+    if [ ! -d ./../Applications/$1 ]
+    then
+        echo "Specify application to build. It must be located in the Application folder."
+        exit 1
+    fi
+
+}
+
+PRODUCT_NAME="$1"
+
+_argument_check $PRODUCT_NAME
+
 eval $(sed -n 's/^#define  *\([^ ]*\)  *\(.*\) *$/export \1=\2/p' ../common/global_consts.h)
 FIRMWARE_VERSION=($VITROIO_TEMPLATE_VERSION_MAJOR.$VITROIO_TEMPLATE_VERSION_MINOR.$VITROIO_TEMPLATE_VERSION_PATCH.$VITROIO_TEMPLATE_VERSION_RC)
 
@@ -28,11 +43,11 @@ if [ $VITROIO_TEMPLATE_VERSION_RC -gt 15 ]; then
     exit 1
 fi
 
-WORK_DIR="./bin"
+WORK_DIR="./bin/$PRODUCT_NAME"
 
 SW_DESCRIPTION="sw-description"
 SW_DESCRIPTION_TEMPLATE="sw-description-template"
-APPS_PATH="../bin"
+APPS_PATH="../bin/$PRODUCT_NAME"
 APP_A_NAME="app_a.bin"
 APP_B_NAME="app_b.bin"
 UPGRADE_PACKAGE_JSON="upgrade_package.json"
@@ -42,7 +57,7 @@ SHELLSCRIPT="trigger_nodes_upgrade.sh"
 echo -e "\nFirmware id is: ${VITRIOIO_TEMPLATE_FIRMWARE_ID}"
 echo -e "\nFirmware version is: ${FIRMWARE_VERSION}\n"
 
-[ -d $WORK_DIR ] || mkdir $WORK_DIR
+[ -d $WORK_DIR ] || mkdir -p $WORK_DIR
 
 cp $SW_DESCRIPTION_TEMPLATE  "$WORK_DIR/$SW_DESCRIPTION"
 
@@ -62,11 +77,10 @@ sed -e "s/.*version.*/    \"version\": \"${FIRMWARE_VERSION}\",/" -i "$WORK_DIR/
 
 cp "$APPS_PATH/$APP_A_NAME" "$WORK_DIR"
 cp "$APPS_PATH/$APP_B_NAME" "$WORK_DIR"
-cp "$SHELLSCRIPT" "$WORK_DIR" 
+cp "$SHELLSCRIPT" "$WORK_DIR"
 
 cd $WORK_DIR
 echo -e "\nBuilding SWU image...\n"
-PRODUCT_NAME="vitroio_template_nodes_upgrade_package"
 FILES="${SW_DESCRIPTION} ${APP_A_NAME} ${APP_B_NAME} ${UPGRADE_PACKAGE_JSON} ${SHELLSCRIPT}"
 for i in $FILES;do
         echo $i;done | cpio -ov -H crc > ${PRODUCT_NAME}_${FIRMWARE_VERSION}.swu

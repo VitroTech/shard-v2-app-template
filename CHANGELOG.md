@@ -30,6 +30,12 @@ TEMPLATE
 
 -->
 
+## [1.4.1] - 2023-03-09
+
+### Changed
+
+- SDK updated to v2.0.1
+
 ## [1.4.0] - 2022-10-21
 
 ### Changed
@@ -114,7 +120,11 @@ TEMPLATE
 - Template for an application main.cpp file
     - It contains code that sends dummy IoT Block every 5s
 
-[1.1.4]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.1.1...v1.1.4
+[Unreleased]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.4.0...v1.4.1
+[1.4.0]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.1.2...v1.2.0
 [1.1.2]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/VitroTech/shard-v2-app-template/compare/v1.0.0...v1.1.0

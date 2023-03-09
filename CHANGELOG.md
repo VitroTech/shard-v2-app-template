@@ -34,7 +34,15 @@ TEMPLATE
 
 ### Changed
 
-- SDK updated to v2.0.1
+- SDK updated to v2.0.1.
+- All scripts stored in repository now needs argument that points to application
+  which given script uses. It is mandatory that application code will be stored
+  inside `Applications/<APPLICATION_NAME>` subdirectory.
+- CI job now works on tag pushes and also produce the `swu` update image and
+  pushes it to the same bucket as Shard images which is
+  [dev-vitro-shard-applications](https://s3.console.aws.amazon.com/s3/buckets/dev-vitro-shard-applications?region=eu-west-1&tab=objects).
+- CI now build only application which name ist stored in PROJECT variable inside
+  of ci.yml file, now it is only `IoTBlock-test` application.
 
 ## [1.4.0] - 2022-10-21
 

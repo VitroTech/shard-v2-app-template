@@ -38,7 +38,7 @@ jobs:
           chmod +x docker_build_image.sh
           git submodule update --init
           ./build_app.sh ${PROJECT}
-          ./nodes_upgrade_package ${PROJECT}
+          ./nodes-upgrade-package/build_swu_image.sh ${PROJECT}
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -64,7 +64,7 @@ jobs:
         run: |
           cd shard-v2-app-template
           ./build_app.sh ${PROJECT}
-          ./nodes_upgrade_package ${PROJECT}
+          ./nodes-upgrade-package/build_swu_image.sh ${PROJECT}
       - name: Prepare bumped files
         run: |
           echo $CURRENT_VERSION

@@ -16,24 +16,29 @@ jobs:
       - name: Get version
         run: |
           cd shard-v2-app-template
-          MAJOR=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | cut -d " " -f 5 | sed -n 1p`
-          MINOR=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | cut -d " " -f 5 | sed -n 2p`
-          PATCH=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | cut -d " " -f 5 | sed -n 3p`
-          CURRENT_VERSION="$MAJOR.$MINOR.$PATCH"
+          MAJOR=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | awk '{print $3}' | sed -n 1p`
+          MINOR=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | awk '{print $3}' | sed -n 2p`
+          PATCH=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | awk '{print $3}' | sed -n 3p`
+          RC=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | awk '{print $3}' | sed -n 4p`
+          CURRENT_VERSION="$MAJOR.$MINOR.$PATCH.$RC"
+          PROJECT="IoTBlock-test"
           echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_ENV
           echo "MAJOR=${MAJOR}" >> $GITHUB_ENV
           echo "MINOR=${MINOR}" >> $GITHUB_ENV
           echo "PATCH=${PATCH}" >> $GITHUB_ENV
+          echo "RC=${RC}" >> $GITHUB_ENV
+          echo "PROJECT=${PROJECT}" >> $GITHUB_ENV
       - name: Apply patch
         run: |
           cd shard-v2-app-template
           git apply patches/0001-docker_build_image.sh-change-docker-flag-to-suit-ci.patch
-      - name: Build app
+      - name: Build app and updates
         run: |
           cd shard-v2-app-template
           chmod +x docker_build_image.sh
           git submodule update --init
-          ./build_app.sh IoTBlock-test
+          ./build_app.sh ${PROJECT}
+          ./nodes_upgrade_package ${PROJECT}
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -41,10 +46,12 @@ jobs:
       - name: Prepare files
         run: |
           echo $CURRENT_VERSION
-          sudo mv shard-v2-app-template/bin/image.bin iot-block-test-${CURRENT_VERSION}.bin
+          sudo mv shard-v2-app-template/bin/${PROJECT}/image.bin ${PROJECT}_${CURRENT_VERSION}.bin
+          sudo mv shard-v2-app-template/nodes-upgrade-package/bin/${PROJECT}/${PROJECT}_${CURRENT_VERSION}.swu .
       - name: Copy files to AWS S3 bucket
         run: |
-          aws s3 cp iot-block-test-${CURRENT_VERSION}.bin s3://dev-vitro-shard-applications/
+          aws s3 cp ${PROJECT}_${CURRENT_VERSION}.bin s3://dev-vitro-shard-applications/
+          aws s3 cp ${PROJECT}_${CURRENT_VERSION}.swu s3://dev-vitro-shard-applications/updates/
       - name: Increase version
         run: |
           NEW_MAJOR=$(($MAJOR + 10))
@@ -53,14 +60,17 @@ jobs:
           echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
           echo "NEW_MAJOR=${NEW_MAJOR}" >> $GITHUB_ENV
           sed -i "s/$MAJOR/$NEW_MAJOR/" shard-v2-app-template/common/global_consts.h
-      - name: Build app version bumped
+      - name: Build app and update with version bumped
         run: |
           cd shard-v2-app-template
-          ./build_app.sh IoTBlock-test
+          ./build_app.sh ${PROJECT}
+          ./nodes_upgrade_package ${PROJECT}
       - name: Prepare bumped files
         run: |
           echo $CURRENT_VERSION
-          sudo mv shard-v2-app-template/bin/image.bin iot-block-test-${NEW_VERSION}.bin
+          sudo mv shard-v2-app-template/bin/${PROJECT}/image.bin ${PROJECT}_${NEW_VERSION}.bin
+          sudo mv shard-v2-app-template/nodes-upgrade-package/bin/${PROJECT}/${PROJECT}_${NEW_VERSION}.swu .
       - name: Copy bumped files to AWS S3 bucket
         run: |
-          aws s3 cp iot-block-test-${NEW_VERSION}.bin s3://dev-vitro-shard-applications/bumped-versions/
+          aws s3 cp ${PROJECT}_${NEW_VERSION}.bin s3://dev-vitro-shard-applications/bumped-versions/
+          aws s3 cp ${PROJECT}_${NEW_VERSION}.swu s3://dev-vitro-shard-applications/bumped-versions/updates

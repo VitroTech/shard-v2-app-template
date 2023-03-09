@@ -1,25 +1,31 @@
-From 48c7c0193ead326f5f22d39bfd338b1cbf951a42 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Micha=C5=82=20Kotyla?= <michal.kotyla@3mdeb.com>
-Date: Mon, 24 Oct 2022 10:00:04 +0200
+From 9712f62e4087c33a95ad8e18c2ab6a01b5b53e8a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tomasz=20=C5=BByjewski?= <tomasz.zyjewski@3mdeb.com>
+Date: Thu, 9 Mar 2023 11:43:43 +0100
 Subject: [PATCH] docker_build_image.sh: change docker flag to suit ci
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Interactive mode does not allow GitHub Actions to correctly build the image
+
+Signed-off-by: Tomasz Żyjewski <tomasz.zyjewski@3mdeb.com>
 ---
  docker_build_image.sh | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/docker_build_image.sh b/docker_build_image.sh
-index 290ca6d..6699bfc 100755
+index 96c8d1fa7164..45ef31a63772 100755
 --- a/docker_build_image.sh
 +++ b/docker_build_image.sh
-@@ -30,7 +30,7 @@ _run_docker(){
-     
+@@ -42,7 +42,7 @@ _run_docker(){
+ 
      if _command_exists docker
      then
--        docker run --rm -it --mount=type=bind,source="$(pwd)",destination=/var/mbed -w /var/mbed ghcr.io/armmbed/mbed-os-env /bin/bash -c ./$build_script
-+        docker run --rm --mount=type=bind,source="$(pwd)",destination=/var/mbed -w /var/mbed ghcr.io/armmbed/mbed-os-env /bin/bash -c ./$build_script
+-        docker run --rm -it --mount=type=bind,source="$(pwd)",destination=/var/mbed -w /var/mbed ghcr.io/armmbed/mbed-os-env /bin/bash -c "./$build_script $1"
++        docker run --rm --mount=type=bind,source="$(pwd)",destination=/var/mbed -w /var/mbed ghcr.io/armmbed/mbed-os-env /bin/bash -c "./$build_script $1"
      else
          echo "Docker is not installed."
          echo "Aborting ..."
 -- 
-2.38.0
+2.34.1
 

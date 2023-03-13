@@ -55,11 +55,11 @@ jobs:
       - name: Increase version
         run: |
           NEW_MAJOR=$(($MAJOR + 10))
-          echo $MAJOR
-          NEW_VERSION="$NEW_MAJOR.$MINOR.$PATCH"
+          NEW_VERSION="$NEW_MAJOR.$MINOR.$PATCH.$RC"
+          echo $NEW_VERSION
           echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
           echo "NEW_MAJOR=${NEW_MAJOR}" >> $GITHUB_ENV
-          sed -i "s/$MAJOR/$NEW_MAJOR/" shard-v2-app-template/common/global_consts.h
+          sed -i "s/VITROIO_TEMPLATE_VERSION_MAJOR.*/VITROIO_TEMPLATE_VERSION_MAJOR   $NEW_MAJOR/" shard-v2-app-template/common/global_consts.h
       - name: Build app and update with version bumped
         run: |
           cd shard-v2-app-template
@@ -67,7 +67,7 @@ jobs:
           ./nodes-upgrade-package/build_swu_image.sh ${PROJECT}
       - name: Prepare bumped files
         run: |
-          echo $CURRENT_VERSION
+          echo $NEW_VERSION
           sudo mv shard-v2-app-template/bin/${PROJECT}/image.bin ${PROJECT}_${NEW_VERSION}.bin
           sudo mv shard-v2-app-template/nodes-upgrade-package/bin/${PROJECT}/${PROJECT}_${NEW_VERSION}.swu .
       - name: Copy bumped files to AWS S3 bucket

@@ -51,7 +51,7 @@ jobs:
       - name: Copy files to AWS S3 bucket
         run: |
           aws s3 cp ${PROJECT}_${CURRENT_VERSION}.bin s3://dev-vitro-shard-applications/
-          aws s3 cp ${PROJECT}_${CURRENT_VERSION}.swu s3://dev-vitro-shard-applications/updates/
+          aws s3 cp ${PROJECT}_${CURRENT_VERSION}.swu s3://dev-vitro-core-sys-images/
       - name: Increase version
         run: |
           NEW_MAJOR=$(($MAJOR + 10))
@@ -73,4 +73,4 @@ jobs:
       - name: Copy bumped files to AWS S3 bucket
         run: |
           aws s3 cp ${PROJECT}_${NEW_VERSION}.bin s3://dev-vitro-shard-applications/bumped-versions/
-          aws s3 cp ${PROJECT}_${NEW_VERSION}.swu s3://dev-vitro-shard-applications/bumped-versions/updates
+          aws s3 cp ${PROJECT}_${NEW_VERSION}.swu s3://dev-vitro-core-sys-images/

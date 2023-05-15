@@ -12,6 +12,25 @@ using namespace vitroio::sdk;
 
 #define SERIAL_BAUDRATE 115200
 
+#define CAN_HANDLER_INFO(format, ...) VITROIO_DEBUG_INFO("CAN HANDLER", format, ##__VA_ARGS__);
+
+void handler(const CanbusFrame& frame){
+    CAN_HANDLER_INFO(
+        "Got frame id: %x, param id: %x, data size: %d",
+        frame.nodeId(),
+        frame.parameterId(),
+        frame.dataLength()
+    )
+    for(int i = 0; i < frame.dataLength(); i++){
+        /* 
+         * NOTE: printf might not be the best functions, it works,
+         * but very poorly
+         */
+        printf("%x ", frame.data()[i]);
+    }
+    printf("\n ");
+}
+
 /**
  * Watchdog ticker
  */
@@ -91,6 +110,8 @@ int main()
     if(err != VITROIO_ERR_SUCCESS){
         MAIN_ERROR("Failed to initialize communication");
     }
+
+    node.setExternalFrameCallback(&handler);
 
     IoTBlock iotBlock = IoTBlock(&can_layer);
     uint8_t block[256] = {0};

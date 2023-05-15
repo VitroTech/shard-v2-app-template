@@ -14,23 +14,6 @@ using namespace vitroio::sdk;
 
 #define CAN_HANDLER_INFO(format, ...) VITROIO_DEBUG_INFO("CAN HANDLER", format, ##__VA_ARGS__);
 
-void handler(const CanbusFrame& frame){
-    CAN_HANDLER_INFO(
-        "Got frame id: %x, param id: %x, data size: %d",
-        frame.nodeId(),
-        frame.parameterId(),
-        frame.dataLength()
-    )
-    for(int i = 0; i < frame.dataLength(); i++){
-        /* 
-         * NOTE: printf might not be the best functions, it works,
-         * but very poorly
-         */
-        printf("%x ", frame.data()[i]);
-    }
-    printf("\n ");
-}
-
 /**
  * Watchdog ticker
  */
@@ -83,6 +66,24 @@ FileHandle *mbed::mbed_override_console(int fd)
 void kickWatchdog(){
 	Watchdog::get_instance().kick();
 }
+
+void handler(const CanbusFrame& frame){
+    CAN_HANDLER_INFO(
+        "Got frame id: %x, param id: %x, data size: %d",
+        frame.nodeId(),
+        frame.parameterId(),
+        frame.dataLength()
+    )
+    for(int i = 0; i < frame.dataLength(); i++){
+        /* 
+         * NOTE: printf might not be the best functions, it works,
+         * but very poorly
+         */
+        printf("%x ", frame.data()[i]);
+    }
+    printf("\n");
+}
+
 
 int main()
 {

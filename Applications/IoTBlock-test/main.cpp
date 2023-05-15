@@ -74,11 +74,8 @@ void handler(const CanbusFrame& frame){
         frame.parameterId(),
         frame.dataLength()
     )
+    /* print contents of the frame on serial port */
     for(int i = 0; i < frame.dataLength(); i++){
-        /* 
-         * NOTE: printf might not be the best functions, it works,
-         * but very poorly
-         */
         printf("%x ", frame.data()[i]);
     }
     printf("\n");

@@ -105,7 +105,7 @@ void sendBlock(IoTBlock &iotBlock, uint8_t blockType){
         break;
     }
 
-    iotBlock.make(block, 1, 0x132);
+    iotBlock.make(block, sizeof(block), 0x132);
     iotBlock.print();
     iotBlock.send();
 }

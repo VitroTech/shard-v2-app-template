@@ -72,21 +72,27 @@ void kickWatchdog(){
 
 void fillPoolingModeBlock(uint8_t *block){
     /* read some values here and copy them to block */
+    standard_telementry *tmp = (standard_telementry *)block;
     for(int i = 0; i < TELEMENTRY_PER_BLOCK; i++){
-        *(uint32_t *)(block + i * STANDARD_TELEMENTRY_SIZE + STANDARD_BATTERY_VOLTAGE_OFFSET) = (uint32_t)1;
-        *(uint32_t *)(block + i * STANDARD_TELEMENTRY_SIZE + STANDARD_TEMP_POLE_1_OFFSET) = (uint32_t)2;
-        *(uint32_t *)(block + i * STANDARD_TELEMENTRY_SIZE + STANDARD_TEMP_POLE_2_OFFSET) = (uint32_t)3;
-        *(uint32_t *)(block + i * STANDARD_TELEMENTRY_SIZE + STANDARD_RESISTANCE_OFFSET) = (uint32_t)4;
-        *(uint32_t *)(block + i * STANDARD_TELEMENTRY_SIZE + STANDARD_CURRENT_OFFSET) = (uint32_t)5;
+        tmp[i] = {
+            .battery_voltage = 1,
+            .temperature_pole_1 = 2,
+            .temperature_pole_2 = 3,
+            .resistance = 4,
+            .current = 5,
+        };
     }
 }
 
 void fillDischargeModeBlock(uint8_t *block){
     /* read some values here and copy them to block */
+    discharge_telementry *tmp = (discharge_telementry *)block;
     for(int i = 0; i < TELEMENTRY_PER_BLOCK; i++){
-        *(uint32_t *)(block + i * DISCHARGE_TELEMENTRY_SIZE + DISCHARGE_BATTERY_VOLTAGE_OFFSET) = (uint32_t)1;
-        *(uint32_t *)(block + i * DISCHARGE_TELEMENTRY_SIZE + DISCHARGE_TEMP_POLE_1_OFFSET) = (uint32_t)2;
-        *(uint32_t *)(block + i * DISCHARGE_TELEMENTRY_SIZE + DISCHARGE_TEMP_POLE_2_OFFSET) = (uint32_t)3;
+        tmp[i] = {
+            .battery_voltage = 1,
+            .temperature_pole_1 = 2,
+            .temperature_pole_2 = 3,
+        };
     }
 }
 

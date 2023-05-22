@@ -162,7 +162,7 @@ int main()
             sendBlock(iotBlock, type);
             ThisThread::sleep_for(60s);
             if(++blockCounter == 5){
-                type = STANDARD_BLOCK;
+                type = DISCHARGE_BLOCK;
                 blockCounter = 0;
             }
             break;

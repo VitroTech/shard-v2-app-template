@@ -3,34 +3,7 @@
 #include <vitroio-sdk/communication/can_layer.h>
 #include <global_consts.h>
 
-//#include "telementry_packet.h"
-#define TELEMENTRY_PER_BLOCK            4
-
-/* standard telementry */
-#define STANDARD_TELEMENTRY_SIZE        20
-
-#define STANDARD_BATTERY_VOLTAGE_SIZE   4
-#define STANDARD_BATTERY_VOLTAGE_OFFSET 0
-
-#define STANDARD_TEMP_POLE_SIZE         4
-#define STANDARD_TEMP_POLE_1_OFFSET     4
-#define STANDARD_TEMP_POLE_2_OFFSET     8
-
-#define STANDARD_RESISTANCE_SIZE        4
-#define STANDARD_RESISTANCE_OFFSET      12
-
-#define STANDARD_CURRENT_SIZE           4
-#define STANDARD_CURRENT_OFFSET         16
-
-/* discharge telementry */
-#define DISCHARGE_TELEMENTRY_SIZE           12
-
-#define DISCHARGE_BATTERY_VOLTAGE_SIZE      4
-#define DISCHARGE_BATTERY_VOLTAGE_OFFSET    0
-
-#define DISCHARGE_TEMP_POLE_SIZE            4
-#define DISCHARGE_TEMP_POLE_1_OFFSET        4
-#define DISCHARGE_TEMP_POLE_2_OFFSET        8
+#include "telementry_packet.h"
 
 #define STANDARD_BLOCK      0
 #define DISCHARGE_BLOCK     1

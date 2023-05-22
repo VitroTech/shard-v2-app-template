@@ -3,7 +3,7 @@
 #include <vitroio-sdk/communication/can_layer.h>
 #include <global_consts.h>
 
-#include "telementry_packet.h"
+#include "telemetry_packet.h"
 
 #define STANDARD_BLOCK      0
 #define DISCHARGE_BLOCK     1
@@ -72,8 +72,8 @@ void kickWatchdog(){
 
 void fillPoolingModeBlock(uint8_t *block){
     /* read some values here and copy them to block */
-    standard_telementry *tmp = (standard_telementry *)block;
-    for(int i = 0; i < TELEMENTRY_PER_BLOCK; i++){
+    standard_telemetry *tmp = (standard_telemetry *)block;
+    for(int i = 0; i < telemetry_PER_BLOCK; i++){
         tmp[i] = {
             .battery_voltage = 1,
             .temperature_pole_1 = 2,
@@ -86,8 +86,8 @@ void fillPoolingModeBlock(uint8_t *block){
 
 void fillDischargeModeBlock(uint8_t *block){
     /* read some values here and copy them to block */
-    discharge_telementry *tmp = (discharge_telementry *)block;
-    for(int i = 0; i < TELEMENTRY_PER_BLOCK; i++){
+    discharge_telemetry *tmp = (discharge_telemetry *)block;
+    for(int i = 0; i < telemetry_PER_BLOCK; i++){
         tmp[i] = {
             .battery_voltage = 1,
             .temperature_pole_1 = 2,

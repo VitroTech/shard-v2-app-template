@@ -75,8 +75,8 @@ jobs:
           aws s3 cp ${PROJECT}_${NEW_VERSION}.bin s3://dev-vitro-shard-applications/bumped-versions/
           aws s3 cp ${PROJECT}_${NEW_VERSION}_upgrade_package.swu s3://dev-vitro-core-sys-images/
 
-  build-telementry:
-    name: Build telementry test app
+  build-telemetry:
+    name: Build telemetry test app
     runs-on: self-hosted
     steps:
       - name: Checkout repo
@@ -91,7 +91,7 @@ jobs:
           PATCH=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | awk '{print $3}' | sed -n 3p`
           RC=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | awk '{print $3}' | sed -n 4p`
           CURRENT_VERSION="$MAJOR.$MINOR.$PATCH.$RC"
-          PROJECT="telementry-test"
+          PROJECT="telemetry-test"
           echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_ENV
           echo "MAJOR=${MAJOR}" >> $GITHUB_ENV
           echo "MINOR=${MINOR}" >> $GITHUB_ENV

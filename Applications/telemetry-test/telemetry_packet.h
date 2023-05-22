@@ -1,24 +1,24 @@
-#ifndef TELEMENTRY_PACKET_H
-#define TELEMENTRY_PACKET_H
+#ifndef telemetry_PACKET_H
+#define telemetry_PACKET_H
 
 #include <stdint.h>
 
-#define TELEMENTRY_PER_BLOCK    4
+#define telemetry_PER_BLOCK    4
 
-/* standard telementry */
+/* standard telemetry */
 typedef struct{
     uint32_t battery_voltage;
     uint32_t temperature_pole_1;
     uint32_t temperature_pole_2;
     uint32_t resistance;
     uint32_t current;
-}standard_telementry;
+}standard_telemetry;
 
-/* discharge telementry */
+/* discharge telemetry */
 typedef struct{
     uint32_t battery_voltage;
     uint32_t temperature_pole_1;
     uint32_t temperature_pole_2;
-}discharge_telementry;
+}discharge_telemetry;
 
 #endif

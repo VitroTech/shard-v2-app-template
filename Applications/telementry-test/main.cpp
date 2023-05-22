@@ -77,6 +77,7 @@ void fillPoolingModeBlock(uint8_t *block){
         *(uint32_t *)(block + i * STANDARD_TELEMENTRY_SIZE + STANDARD_TEMP_POLE_1_OFFSET) = (uint32_t)2;
         *(uint32_t *)(block + i * STANDARD_TELEMENTRY_SIZE + STANDARD_TEMP_POLE_2_OFFSET) = (uint32_t)3;
         *(uint32_t *)(block + i * STANDARD_TELEMENTRY_SIZE + STANDARD_RESISTANCE_OFFSET) = (uint32_t)4;
+        *(uint32_t *)(block + i * STANDARD_TELEMENTRY_SIZE + STANDARD_CURRENT_OFFSET) = (uint32_t)5;
     }
 }
 

@@ -119,7 +119,7 @@ void sendBlock(IoTBlock &iotBlock, uint8_t blockType){
 int main()
 {
     MAIN_INFO("Application started; (id: %d) v%d.%d.%d.%d; vitroio-sdk v%s",
-        VITRIOIO_TEMPLATE_FIRMWARE_ID,
+        VITRIOIO_TELEMETRY_FIRMWARE_ID,
         VITROIO_TEMPLATE_VERSION_MAJOR, VITROIO_TEMPLATE_VERSION_MINOR, VITROIO_TEMPLATE_VERSION_PATCH, VITROIO_TEMPLATE_VERSION_RC,
         VITROIO_SDK_VERSION);
 

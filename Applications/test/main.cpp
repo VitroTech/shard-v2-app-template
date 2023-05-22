@@ -32,6 +32,9 @@
 #define DISCHARGE_TEMP_POLE_1_OFFSET        4
 #define DISCHARGE_TEMP_POLE_2_OFFSET        8
 
+#define STANDARD_BLOCK      0
+#define DISCHARGE_BLOCK     1
+
 using namespace vitroio::sdk;
 
 #define MAIN_MODULE_NAME "MAIN"
@@ -104,14 +107,6 @@ void fillPoolingModeBlock(uint8_t *block){
     }
 }
 
-void sendPoolingModeBlock(IoTBlock &iotBlock){
-    uint8_t block[128] = {0};
-    fillPoolingModeBlock(block);
-    iotBlock.make(block, 1, 0x132);
-    iotBlock.print();
-    iotBlock.send();
-}
-
 void fillDischargeModeBlock(uint8_t *block){
     /* read some values here and copy them to block */
     for(int i = 0; i < TELEMENTRY_PER_BLOCK; i++){
@@ -121,9 +116,21 @@ void fillDischargeModeBlock(uint8_t *block){
     }
 }
 
-void sendDischargeModeBlock(IoTBlock &iotBlock){
+void sendBlock(IoTBlock &iotBlock, uint8_t blockType){
     uint8_t block[128] = {0};
-    fillDischargeModeBlock(block);
+
+    switch (blockType)
+    {
+    case STANDARD_BLOCK:
+        fillPoolingModeBlock(block);
+        break;
+    case DISCHARGE_BLOCK:
+        fillDischargeModeBlock(block);
+        break;
+    default:
+        break;
+    }
+
     iotBlock.make(block, 1, 0x132);
     iotBlock.print();
     iotBlock.send();
@@ -156,7 +163,32 @@ int main()
         MAIN_ERROR("Failed to initialize communication");
     }
 
+    IoTBlock iotBlock = IoTBlock(&can_layer);
+
+    int type = DISCHARGE_BLOCK;
+    int blockCounter = 0;
+
     for(;;) {
+        switch (type){
+        case DISCHARGE_BLOCK:
+            sendBlock(iotBlock, type);
+            ThisThread::sleep_for(1s);
+            if(++blockCounter == 60){
+                type = STANDARD_BLOCK;
+                blockCounter = 0;
+            }
+            break;
+        case STANDARD_BLOCK:
+            sendBlock(iotBlock, type);
+            ThisThread::sleep_for(60s);
+            if(++blockCounter == 5){
+                type = STANDARD_BLOCK;
+                blockCounter = 0;
+            }
+            break;
+        default:
+            break;
+        }
     }
 
     return 0;

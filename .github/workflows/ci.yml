@@ -5,7 +5,7 @@ on:
       - v*.*.*
 
 jobs:
-  build:
+  build-iotBlock:
     name: Build IoT Block test app
     runs-on: self-hosted
     steps:
@@ -22,6 +22,76 @@ jobs:
           RC=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | awk '{print $3}' | sed -n 4p`
           CURRENT_VERSION="$MAJOR.$MINOR.$PATCH.$RC"
           PROJECT="IoTBlock-test"
+          echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_ENV
+          echo "MAJOR=${MAJOR}" >> $GITHUB_ENV
+          echo "MINOR=${MINOR}" >> $GITHUB_ENV
+          echo "PATCH=${PATCH}" >> $GITHUB_ENV
+          echo "RC=${RC}" >> $GITHUB_ENV
+          echo "PROJECT=${PROJECT}" >> $GITHUB_ENV
+      - name: Apply patch
+        run: |
+          cd shard-v2-app-template
+          git apply patches/0001-docker_build_image.sh-change-docker-flag-to-suit-ci.patch
+      - name: Build app and updates
+        run: |
+          cd shard-v2-app-template
+          chmod +x docker_build_image.sh
+          git submodule update --init
+          ./build_app.sh ${PROJECT}
+          ./nodes-upgrade-package/build_swu_image.sh ${PROJECT}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-1
+      - name: Prepare files
+        run: |
+          echo $CURRENT_VERSION
+          sudo mv shard-v2-app-template/bin/${PROJECT}/image.bin ${PROJECT}_${CURRENT_VERSION}.bin
+          sudo mv shard-v2-app-template/nodes-upgrade-package/bin/${PROJECT}/${PROJECT}_${CURRENT_VERSION}.swu ${PROJECT}_${CURRENT_VERSION}_upgrade_package.swu
+      - name: Copy files to AWS S3 bucket
+        run: |
+          aws s3 cp ${PROJECT}_${CURRENT_VERSION}.bin s3://dev-vitro-shard-applications/
+          aws s3 cp ${PROJECT}_${CURRENT_VERSION}_upgrade_package.swu s3://dev-vitro-core-sys-images/
+      - name: Increase version
+        run: |
+          NEW_MAJOR=$(($MAJOR + 10))
+          NEW_VERSION="$NEW_MAJOR.$MINOR.$PATCH.$RC"
+          echo $NEW_VERSION
+          echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
+          echo "NEW_MAJOR=${NEW_MAJOR}" >> $GITHUB_ENV
+          sed -i "s/VITROIO_TEMPLATE_VERSION_MAJOR.*/VITROIO_TEMPLATE_VERSION_MAJOR   $NEW_MAJOR/" shard-v2-app-template/common/global_consts.h
+      - name: Build app and update with version bumped
+        run: |
+          cd shard-v2-app-template
+          ./build_app.sh ${PROJECT}
+          ./nodes-upgrade-package/build_swu_image.sh ${PROJECT}
+      - name: Prepare bumped files
+        run: |
+          echo $NEW_VERSION
+          sudo mv shard-v2-app-template/bin/${PROJECT}/image.bin ${PROJECT}_${NEW_VERSION}.bin
+          sudo mv shard-v2-app-template/nodes-upgrade-package/bin/${PROJECT}/${PROJECT}_${NEW_VERSION}.swu ${PROJECT}_${NEW_VERSION}_upgrade_package.swu
+      - name: Copy bumped files to AWS S3 bucket
+        run: |
+          aws s3 cp ${PROJECT}_${NEW_VERSION}.bin s3://dev-vitro-shard-applications/bumped-versions/
+          aws s3 cp ${PROJECT}_${NEW_VERSION}_upgrade_package.swu s3://dev-vitro-core-sys-images/
+
+  build-telemetry:
+    name: Build telemetry test app
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          path: "shard-v2-app-template"
+      - name: Get version
+        run: |
+          cd shard-v2-app-template
+          MAJOR=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | awk '{print $3}' | sed -n 1p`
+          MINOR=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | awk '{print $3}' | sed -n 2p`
+          PATCH=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | awk '{print $3}' | sed -n 3p`
+          RC=`cat common/global_consts.h | grep VITROIO_TEMPLATE_VERSION | awk '{print $3}' | sed -n 4p`
+          CURRENT_VERSION="$MAJOR.$MINOR.$PATCH.$RC"
+          PROJECT="telemetry-test"
           echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_ENV
           echo "MAJOR=${MAJOR}" >> $GITHUB_ENV
           echo "MINOR=${MINOR}" >> $GITHUB_ENV

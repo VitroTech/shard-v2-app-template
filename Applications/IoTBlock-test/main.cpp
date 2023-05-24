@@ -104,8 +104,7 @@ int main()
         MAIN_ERROR("Failed to configure Shard Edge");
     }
 
-    int err = node.initCommunication(&can_layer);
-    if(err != VITROIO_ERR_SUCCESS){
+    while(node.initCommunication(&can_layer) != VITROIO_ERR_SUCCESS){
         MAIN_ERROR("Failed to initialize communication");
     }
 

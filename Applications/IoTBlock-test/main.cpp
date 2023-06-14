@@ -99,7 +99,7 @@ int main()
     while(1) {
         block[i] = i;
         iotBlock.make(block, i + 1, 0x132);
-        iotBlock.print();
+        //iotBlock.print();
 
         iotBlock.send();
         i++;

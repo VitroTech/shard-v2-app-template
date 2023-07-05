@@ -13,8 +13,9 @@ git submodule update --init
 
 To build the application, docker is recommended to be installed on your PC. This
 way you don't need to install the entire toolchain, you can just run the
-ready-to-use script. If you don't have it installed and you use Ubuntu follow
-this instruction: https://docs.docker.com/engine/install/ubuntu/.
+ready-to-use script. If you don't have it installed and you use Ubuntu, follow
+[install instruction](https://docs.docker.com/engine/install/ubuntu/) and
+[post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/).
 
 Demo applications are placed in `Applications` directory. To copy, and build,
 selected application to `app_src` directory (from when application is being

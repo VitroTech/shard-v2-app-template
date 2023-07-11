@@ -40,6 +40,26 @@ It can be done by using `docker_flash_image.sh` script.
 > Note: this method needs ST-Link device connected to host PC and also a header
   populated on Shard.
 
+### Building application with fixed/older SDK version
+
+If you need to build applications in a specific version, go through the
+previous part of the instructions to make sure that it has all the required
+components.
+
+1. Do a `git checkout v1.x.x` where `v1.x.x` is the version of the application
+you want to build
+2. Go to `libs/vitroio-sdk/vitroio-sdk` and do `git pull origin`
+3. Using [CHANGELOG.md](/CHANGELOG.md) determine which version of the SDK was
+used by a given version of the application, execute the command in the current
+directory `git checkout v1.x.x` where `v1.x.x` is the version of the required
+SDK
+4. Delete the app_a/mbed-os and app_b/mbed-os folders
+> This is because `cat app_a/mbed-os.lib` has a link to the branch in it, but
+the Mbed-os already downloaded will not do a checkout based on the file. The
+easiest way to do this is to delete these folders.
+5. You can now build your application by going to the main repository folder
+and executing the command `./build_app.sh IoTBlock-test`
+
 ## Building swu image
 
 The `swu` image is and update image for Vitro Shard built with
